@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.interestingshop.dao.notice.NoticeMapper">
+    
+    <!-- 结果映射 -->
+    <resultMap id="noticeMap" type="cn.interestingshop.entity.Notice">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="createTime"/>
+    </resultMap>
+    
+    <!-- 基础列 -->
+    <sql id="baseColumns">
+        id, title, content, createTime
+    </sql>
+    
+    <!-- 保存公告 -->
+    <insert id="save" parameterType="cn.interestingshop.entity.Notice" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_notice(title, content, createTime)
+        VALUES (#{title}, #{content}, #{createTime})
+    </insert>
+    
+    <!-- 更新公告 -->
+    <update id="update" parameterType="cn.interestingshop.entity.Notice">
+        UPDATE t_notice
+        SET title = #{title},
+            content = #{content}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除公告 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM t_notice WHERE id = #{id}
+    </delete>
+    
+    <!-- 分页查询公告列表 -->
+    <select id="selectList" resultMap="noticeMap">
+        SELECT <include refid="baseColumns"/>
+        FROM t_notice
+        <where>
+            <if test="title != null and title != ''">
+                AND title LIKE CONCAT('%', #{title}, '%')
+            </if>
+        </where>
+        ORDER BY id DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+    
+    <!-- 查询公告总数 -->
+    <select id="selectCount" resultType="int">
+        SELECT COUNT(*)
+        FROM t_notice
+        <where>
+            <if test="title != null and title != ''">
+                AND title LIKE CONCAT('%', #{title}, '%')
+            </if>
+        </where>
+    </select>
+    
+    <!-- 根据ID查询公告 -->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="noticeMap">
+        SELECT <include refid="baseColumns"/>
+        FROM t_notice
+        WHERE id = #{id}
+    </select>
+</mapper> 

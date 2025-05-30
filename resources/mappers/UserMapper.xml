@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.interestingshop.dao.user.UserMapper">
+    
+    <!-- 结果映射 -->
+    <resultMap id="userMap" type="cn.interestingshop.entity.User">
+        <id property="id" column="id"/>
+        <result property="account" column="account"/>
+        <result property="password" column="password"/>
+        <result property="nickName" column="nickName"/>
+        <result property="gender" column="gender"/>
+        <result property="idCardNo" column="idCardNo"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="type" column="type"/>
+    </resultMap>
+    
+    <!-- 基础列 -->
+    <sql id="baseColumns">
+        id, account, password, nickName, gender, idCardNo, email, phone, type
+    </sql>
+    
+    <!-- 保存用户 -->
+    <insert id="save" parameterType="cn.interestingshop.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_user(account, nickName, password, gender, idCardNo, email, phone)
+        VALUES (#{account}, #{nickName}, #{password}, #{gender}, #{idCardNo}, #{email}, #{phone})
+    </insert>
+    
+    <!-- 更新用户 -->
+    <update id="update" parameterType="cn.interestingshop.entity.User">
+        UPDATE t_user
+        SET account = #{account},
+            nickName = #{nickName},
+            type = #{type},
+            gender = #{gender},
+            idCardNo = #{idCardNo},
+            email = #{email},
+            phone = #{phone}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除用户 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM t_user WHERE id = #{id}
+    </delete>
+    
+    <!-- 分页查询用户列表 -->
+    <select id="selectList" resultMap="userMap">
+        SELECT <include refid="baseColumns"/>
+        FROM t_user
+        LIMIT #{offset}, #{limit}
+    </select>
+    
+    <!-- 查询用户总数 -->
+    <select id="selectCount" resultType="int">
+        SELECT COUNT(*) FROM t_user
+    </select>
+    
+    <!-- 根据ID查询用户 -->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="userMap">
+        SELECT <include refid="baseColumns"/>
+        FROM t_user
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 根据账号查询用户 -->
+    <select id="selectByAccount" parameterType="java.lang.String" resultMap="userMap">
+        SELECT <include refid="baseColumns"/>
+        FROM t_user
+        WHERE account = #{account}
+    </select>
+    
+    <!-- 根据ID和账号查询用户 -->
+    <select id="selectByIdAndAccount" resultMap="userMap">
+        SELECT <include refid="baseColumns"/>
+        FROM t_user
+        WHERE 1=1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="account != null and account != ''">
+            AND account = #{account}
+        </if>
+    </select>
+</mapper> 

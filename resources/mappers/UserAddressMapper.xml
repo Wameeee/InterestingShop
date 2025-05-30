@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.interestingshop.dao.user.UserAddressMapper">
+    
+    <!-- 结果映射 -->
+    <resultMap id="userAddressMap" type="cn.interestingshop.entity.UserAddress">
+        <id property="id" column="id"/>
+        <result property="userId" column="userId"/>
+        <result property="address" column="address"/>
+        <result property="createTime" column="createTime"/>
+        <result property="remark" column="remark"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="isDefault" column="isDefault"/>
+    </resultMap>
+    
+    <!-- 基础列 -->
+    <sql id="baseColumns">
+        id, userId, address, createTime, remark, name, phone, isDefault
+    </sql>
+    
+    <!-- 保存用户地址 -->
+    <insert id="save" parameterType="cn.interestingshop.entity.UserAddress" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_user_address(userId, address, createTime, remark, name, phone, isDefault)
+        VALUES (#{userId}, #{address}, #{createTime}, #{remark}, #{name}, #{phone}, #{isDefault})
+    </insert>
+    
+    <!-- 更新用户地址 -->
+    <update id="update" parameterType="cn.interestingshop.entity.UserAddress">
+        UPDATE t_user_address
+        SET address = #{address},
+            remark = #{remark},
+            name = #{name},
+            phone = #{phone},
+            isDefault = #{isDefault}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除用户地址 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM t_user_address WHERE id = #{id}
+    </delete>
+    
+    <!-- 查询用户地址列表 -->
+    <select id="selectList" resultMap="userAddressMap">
+        SELECT <include refid="baseColumns"/>
+        FROM t_user_address
+        WHERE userId = #{userId}
+        ORDER BY isDefault DESC, createTime DESC
+    </select>
+    
+    <!-- 根据ID查询用户地址 -->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="userAddressMap">
+        SELECT <include refid="baseColumns"/>
+        FROM t_user_address
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 查询用户默认地址 -->
+    <select id="selectDefaultAddress" resultMap="userAddressMap">
+        SELECT <include refid="baseColumns"/>
+        FROM t_user_address
+        WHERE userId = #{userId} AND isDefault = 1
+        LIMIT 1
+    </select>
+</mapper> 

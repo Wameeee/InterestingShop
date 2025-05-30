@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.interestingshop.dao.goods.ClassifyMapper">
+    
+    <!-- 结果映射 -->
+    <resultMap id="classifyMap" type="cn.interestingshop.entity.Classify">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="parentId" column="parentId"/>
+        <result property="type" column="type"/>
+        <result property="iconClass" column="iconClass"/>
+    </resultMap>
+    
+    <!-- 基础列 -->
+    <sql id="baseColumns">
+        id, classifyName, parentId, type, icon
+    </sql>
+    
+    <!-- 保存分类 -->
+    <insert id="save" parameterType="cn.interestingshop.entity.Classify" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_classify(classifyName, parentId, type, icon)
+        VALUES (#{name}, #{parentId}, #{type}, #{iconClass})
+    </insert>
+    
+    <!-- 更新分类 -->
+    <update id="update" parameterType="cn.interestingshop.entity.Classify">
+        UPDATE t_classify
+        SET classifyName = #{classifyName},
+            parentId = #{parentId},
+            type = #{type},
+            icon = #{icon}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除分类 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM t_classify WHERE id = #{id}
+    </delete>
+    
+    <!-- 分页查询分类列表 -->
+    <select id="selectList" resultMap="classifyMap">
+        SELECT <include refid="baseColumns"/>
+        FROM t_classify
+        LIMIT #{offset}, #{limit}
+    </select>
+    
+    <!-- 查询所有分类列表 -->
+    <select id="selectAll" resultMap="classifyMap">
+        SELECT <include refid="baseColumns"/>
+        FROM t_classify
+    </select>
+    
+    <!-- 查询分类总数 -->
+    <select id="selectCount" resultType="int">
+        SELECT COUNT(*) FROM t_classify
+    </select>
+    
+    <!-- 根据ID查询分类 -->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="classifyMap">
+        SELECT <include refid="baseColumns"/>
+        FROM t_classify
+        WHERE id = #{id}
+    </select>
+</mapper> 

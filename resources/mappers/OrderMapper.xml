@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.interestingshop.dao.order.OrderMapper">
+    
+    <!-- 订单基本信息结果映射 -->
+    <resultMap id="baseOrderMap" type="cn.interestingshop.entity.BaseOrder">
+        <id property="id" column="id"/>
+        <result property="userId" column="userId"/>
+        <result property="addressId" column="addressId"/>
+        <result property="createTime" column="createTime"/>
+        <result property="cost" column="cost"/>
+        <result property="serialNumber" column="serialNumber"/>
+        <result property="payType" column="payType"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    
+    <!-- 订单详情结果映射 -->
+    <resultMap id="orderInfoMap" type="cn.interestingshop.entity.OrderInfo">
+        <id property="id" column="id"/>
+        <result property="goodsId" column="goodsId"/>
+        <result property="orderId" column="orderId"/>
+        <result property="quantity" column="quantity"/>
+        <result property="cost" column="cost"/>
+    </resultMap>
+    
+    <!-- 订单基本信息基础列 -->
+    <sql id="baseOrderColumns">
+        id, userId, addressId, createTime, cost, serialNumber, payType, status
+    </sql>
+    
+    <!-- 订单详情基础列 -->
+    <sql id="orderInfoColumns">
+        id, goodsId, orderId, quantity, cost
+    </sql>
+    
+    <!-- 保存订单基本信息 -->
+    <insert id="saveBaseOrder" parameterType="cn.interestingshop.entity.BaseOrder" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_base_order(userId, addressId, createTime, cost, serialNumber, payType, status)
+        VALUES (#{userId}, #{addressId}, #{createTime}, #{cost}, #{serialNumber}, #{payType}, #{status})
+    </insert>
+    
+    <!-- 保存订单详情信息 -->
+    <insert id="saveOrderInfo" parameterType="cn.interestingshop.entity.OrderInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_order_info(goodsId, orderId, quantity, cost)
+        VALUES (#{goodsId}, #{orderId}, #{quantity}, #{cost})
+    </insert>
+    
+    <!-- 更新订单状态 -->
+    <update id="updateOrderStatus">
+        UPDATE t_base_order
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除订单基本信息 -->
+    <delete id="deleteBaseOrderById" parameterType="java.lang.Integer">
+        DELETE FROM t_base_order WHERE id = #{id}
+    </delete>
+    
+    <!-- 删除订单详情信息 -->
+    <delete id="deleteOrderInfoByOrderId" parameterType="java.lang.Integer">
+        DELETE FROM t_order_info WHERE id = #{orderId}
+    </delete>
+    
+    <!-- 分页查询用户订单列表 -->
+    <select id="selectBaseOrderList" resultMap="baseOrderMap">
+        SELECT <include refid="baseOrderColumns"/>
+        FROM t_base_order
+        <where>
+            <if test="userId != null">
+                AND userId = #{userId}
+            </if>
+        </where>
+        ORDER BY createTime DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+    
+    <!-- 查询订单总数 -->
+    <select id="selectBaseOrderCount" resultType="int">
+        SELECT COUNT(*)
+        FROM t_base_order
+        <where>
+            <if test="userId != null">
+                AND userId = #{userId}
+            </if>
+        </where>
+    </select>
+    
+    <!-- 根据ID查询订单基本信息 -->
+    <select id="selectBaseOrderById" parameterType="java.lang.Integer" resultMap="baseOrderMap">
+        SELECT <include refid="baseOrderColumns"/>
+        FROM t_base_order
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 根据订单ID查询订单详情列表 -->
+    <select id="selectOrderInfoListByOrderId" parameterType="java.lang.Integer" resultMap="orderInfoMap">
+        SELECT <include refid="orderInfoColumns"/>
+        FROM t_order_info
+        WHERE orderId = #{orderId}
+    </select>
+</mapper> 
