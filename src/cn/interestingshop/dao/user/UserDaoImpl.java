@@ -11,7 +11,6 @@ import org.apache.ibatis.session.SqlSession;
 import cn.interestingshop.dao.BaseDaoImpl;
 import cn.interestingshop.entity.User;
 import cn.interestingshop.utils.EmptyUtils;
-import cn.interestingshop.utils.MyBatisUtil;
 import cn.interestingshop.utils.Pager;
 
 /**
@@ -20,11 +19,11 @@ import cn.interestingshop.utils.Pager;
 public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
     private UserMapper userMapper;
+    private SqlSession sqlSession;
 
-    public UserDaoImpl(Connection connection) {
+    public UserDaoImpl(Connection connection, SqlSession sqlSession) {
         super(connection);
-        // 获取MyBatis的UserMapper接口实现
-        SqlSession sqlSession = MyBatisUtil.getSqlSession();
+        this.sqlSession = sqlSession;
         this.userMapper = sqlSession.getMapper(UserMapper.class);
     }
 
@@ -37,14 +36,10 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     public int save(User user) {
         try {
             int result = userMapper.save(user);
-            MyBatisUtil.commit(); // 提交事务
             return user.getId();
         } catch (Exception e) {
-            MyBatisUtil.rollback(); // 回滚事务
             e.printStackTrace();
             return 0;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 
@@ -52,14 +47,10 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     public int update(User user) {
         try {
             int result = userMapper.update(user);
-            MyBatisUtil.commit(); // 提交事务
             return result;
         } catch (Exception e) {
-            MyBatisUtil.rollback(); // 回滚事务
             e.printStackTrace();
             return 0;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 
@@ -67,14 +58,10 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     public int deleteById(String id) {
         try {
             int result = userMapper.deleteById(Integer.parseInt(id));
-            MyBatisUtil.commit(); // 提交事务
             return result;
         } catch (Exception e) {
-            MyBatisUtil.rollback(); // 回滚事务
             e.printStackTrace();
             return 0;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 
@@ -90,8 +77,6 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
     
@@ -117,8 +102,6 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 

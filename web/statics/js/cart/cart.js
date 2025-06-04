@@ -103,6 +103,9 @@ function settlement3(){
             return;
         }
     }
+    
+    console.log("提交结算请求，地址ID: " + addressId + ", 新地址: " + newAddress);
+    
     $.ajax({
         url: contextPath + "/cart",
         method: "post",
@@ -118,7 +121,12 @@ function settlement3(){
         		showMessage(result.message);
         	}else{
         		$("#settlement").html(jsonStr);
+        		console.log("结算成功，返回的HTML长度: " + jsonStr.length);
         	}
+        },
+        error: function(xhr, status, error) {
+            console.error("结算请求失败: " + error);
+            showMessage("结算请求失败，请稍后重试");
         }
     });
 }

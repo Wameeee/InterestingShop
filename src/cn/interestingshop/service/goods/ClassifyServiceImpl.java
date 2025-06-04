@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
+
 import cn.interestingshop.dao.goods.ClassifyDao;
 import cn.interestingshop.dao.goods.ClassifyDaoImpl;
 import cn.interestingshop.entity.Classify;
@@ -11,6 +13,7 @@ import cn.interestingshop.param.ClassifyParam;
 import cn.interestingshop.utils.ClassifyVo;
 import cn.interestingshop.utils.DataSourceUtil;
 import cn.interestingshop.utils.EmptyUtils;
+import cn.interestingshop.utils.MyBatisUtil;
 
 /**
  * Created by bdqn on 2016/5/8.
@@ -24,14 +27,19 @@ public class ClassifyServiceImpl implements ClassifyService {
     @Override
     public Classify getById(Integer id) {
         Connection connection = null;
+        SqlSession sqlSession = null;
         Classify classify = null;
         try {
             connection = DataSourceUtil.openConnection();
-            ClassifyDao classifyDao = new ClassifyDaoImpl(connection);
-            classify =classifyDao.selectById(id);
+            sqlSession = MyBatisUtil.openSession();
+            ClassifyDao classifyDao = new ClassifyDaoImpl(connection, sqlSession);
+            classify = classifyDao.selectById(id);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
             DataSourceUtil.closeConnection(connection);
         }
         return classify;
@@ -40,14 +48,19 @@ public class ClassifyServiceImpl implements ClassifyService {
     @Override
     public List<Classify> getList(ClassifyParam params) {
         Connection connection = null;
+        SqlSession sqlSession = null;
         List<Classify> rtn = null;
         try {
             connection = DataSourceUtil.openConnection();
-            ClassifyDao classifyDao = new ClassifyDaoImpl(connection);
+            sqlSession = MyBatisUtil.openSession();
+            ClassifyDao classifyDao = new ClassifyDaoImpl(connection, sqlSession);
             rtn = classifyDao.selectList(params);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
             DataSourceUtil.closeConnection(connection);
         }
         return rtn;
@@ -56,14 +69,19 @@ public class ClassifyServiceImpl implements ClassifyService {
     @Override
     public int getCount(ClassifyParam params) {
         Connection connection = null;
+        SqlSession sqlSession = null;
         int rtn = 0;
         try {
             connection = DataSourceUtil.openConnection();
-            ClassifyDao classifyDao = new ClassifyDaoImpl(connection);
+            sqlSession = MyBatisUtil.openSession();
+            ClassifyDao classifyDao = new ClassifyDaoImpl(connection, sqlSession);
             rtn = classifyDao.selectCount(params);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
             DataSourceUtil.closeConnection(connection);
         }
         return rtn;
@@ -72,13 +90,22 @@ public class ClassifyServiceImpl implements ClassifyService {
     @Override
     public void update(Classify classify) {
         Connection connection = null;
+        SqlSession sqlSession = null;
         try {
             connection = DataSourceUtil.openConnection();
-            ClassifyDao classifyDao = new ClassifyDaoImpl(connection);
+            sqlSession = MyBatisUtil.openSession();
+            ClassifyDao classifyDao = new ClassifyDaoImpl(connection, sqlSession);
             classifyDao.update(classify);
+            sqlSession.commit();
         } catch (Exception e) {
+            if (sqlSession != null) {
+                sqlSession.rollback();
+            }
             e.printStackTrace();
         } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
             DataSourceUtil.closeConnection(connection);
         }
     }
@@ -88,13 +115,22 @@ public class ClassifyServiceImpl implements ClassifyService {
     @Override
     public void save(Classify classify) {
         Connection connection = null;
+        SqlSession sqlSession = null;
         try {
             connection = DataSourceUtil.openConnection();
-            ClassifyDao classifyDao = new ClassifyDaoImpl(connection);
+            sqlSession = MyBatisUtil.openSession();
+            ClassifyDao classifyDao = new ClassifyDaoImpl(connection, sqlSession);
             classifyDao.save(classify);
+            sqlSession.commit();
         } catch (Exception e) {
+            if (sqlSession != null) {
+                sqlSession.rollback();
+            }
             e.printStackTrace();
         } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
             DataSourceUtil.closeConnection(connection);
         }
     }
@@ -105,13 +141,22 @@ public class ClassifyServiceImpl implements ClassifyService {
     @Override
     public void deleteById(Integer id) {
         Connection connection = null;
+        SqlSession sqlSession = null;
         try {
             connection = DataSourceUtil.openConnection();
-            ClassifyDao classifyDao = new ClassifyDaoImpl(connection);
+            sqlSession = MyBatisUtil.openSession();
+            ClassifyDao classifyDao = new ClassifyDaoImpl(connection, sqlSession);
             classifyDao.deleteById(id);
+            sqlSession.commit();
         } catch (Exception e) {
+            if (sqlSession != null) {
+                sqlSession.rollback();
+            }
             e.printStackTrace();
         } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
             DataSourceUtil.closeConnection(connection);
         }
     }
@@ -159,10 +204,12 @@ public class ClassifyServiceImpl implements ClassifyService {
      */
     private List<Classify> getGoodsCategories(Integer parentId) {//根据父ID查询所有子商品分类
         Connection connection = null;
+        SqlSession sqlSession = null;
         List<Classify> classifyList = null;
         try {
             connection = DataSourceUtil.openConnection();
-            ClassifyDao classifyDao = new ClassifyDaoImpl(connection);
+            sqlSession = MyBatisUtil.openSession();
+            ClassifyDao classifyDao = new ClassifyDaoImpl(connection, sqlSession);
             ClassifyParam params = new ClassifyParam();
             if (EmptyUtils.isNotEmpty(parentId)) {
             	params.setParentId(parentId);
@@ -173,6 +220,9 @@ public class ClassifyServiceImpl implements ClassifyService {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
             DataSourceUtil.closeConnection(connection);
         }
         return classifyList;

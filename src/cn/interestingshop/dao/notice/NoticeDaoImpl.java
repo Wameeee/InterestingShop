@@ -11,7 +11,6 @@ import cn.interestingshop.dao.BaseDaoImpl;
 import cn.interestingshop.entity.Notice;
 import cn.interestingshop.param.NoticeParams;
 import cn.interestingshop.utils.EmptyUtils;
-import cn.interestingshop.utils.MyBatisUtil;
 import cn.interestingshop.utils.Pager;
 
 /**
@@ -20,11 +19,11 @@ import cn.interestingshop.utils.Pager;
 public class NoticeDaoImpl extends BaseDaoImpl implements NoticeDao {
 
 	private NoticeMapper noticeMapper;
+	private SqlSession sqlSession;
 
-	public NoticeDaoImpl(Connection connection) {
+	public NoticeDaoImpl(Connection connection, SqlSession sqlSession) {
 		super(connection);
-		// 获取MyBatis的NoticeMapper接口实现
-		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		this.sqlSession = sqlSession;
 		this.noticeMapper = sqlSession.getMapper(NoticeMapper.class);
 	}
 
@@ -41,8 +40,6 @@ public class NoticeDaoImpl extends BaseDaoImpl implements NoticeDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -68,8 +65,6 @@ public class NoticeDaoImpl extends BaseDaoImpl implements NoticeDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -86,8 +81,6 @@ public class NoticeDaoImpl extends BaseDaoImpl implements NoticeDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -101,13 +94,9 @@ public class NoticeDaoImpl extends BaseDaoImpl implements NoticeDao {
 	public void save(Notice notice) throws Exception {
 		try {
 			noticeMapper.save(notice);
-			MyBatisUtil.commit();
 		} catch (Exception e) {
-			MyBatisUtil.rollback();
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -120,13 +109,9 @@ public class NoticeDaoImpl extends BaseDaoImpl implements NoticeDao {
 	public void update(Notice notice) throws Exception {
 		try {
 			noticeMapper.update(notice);
-			MyBatisUtil.commit();
 		} catch (Exception e) {
-			MyBatisUtil.rollback();
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -139,13 +124,9 @@ public class NoticeDaoImpl extends BaseDaoImpl implements NoticeDao {
 	public void deleteById(Integer id) throws Exception {
 		try {
 			noticeMapper.deleteById(id);
-			MyBatisUtil.commit();
 		} catch (Exception e) {
-			MyBatisUtil.rollback();
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 

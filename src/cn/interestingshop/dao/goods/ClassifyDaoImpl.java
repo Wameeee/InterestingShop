@@ -11,7 +11,6 @@ import cn.interestingshop.dao.BaseDaoImpl;
 import cn.interestingshop.entity.Classify;
 import cn.interestingshop.param.ClassifyParam;
 import cn.interestingshop.utils.EmptyUtils;
-import cn.interestingshop.utils.MyBatisUtil;
 import cn.interestingshop.utils.Pager;
 
 /**
@@ -20,11 +19,11 @@ import cn.interestingshop.utils.Pager;
 public class ClassifyDaoImpl extends BaseDaoImpl implements ClassifyDao {
 
 	private ClassifyMapper classifyMapper;
+	private SqlSession sqlSession;
 
-	public ClassifyDaoImpl(Connection connection) {
+	public ClassifyDaoImpl(Connection connection, SqlSession sqlSession) {
 		super(connection);
-		// 获取MyBatis的ClassifyMapper接口实现
-		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		this.sqlSession = sqlSession;
 		this.classifyMapper = sqlSession.getMapper(ClassifyMapper.class);
 	}
 
@@ -41,8 +40,6 @@ public class ClassifyDaoImpl extends BaseDaoImpl implements ClassifyDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -58,8 +55,6 @@ public class ClassifyDaoImpl extends BaseDaoImpl implements ClassifyDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -84,8 +79,6 @@ public class ClassifyDaoImpl extends BaseDaoImpl implements ClassifyDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -101,8 +94,6 @@ public class ClassifyDaoImpl extends BaseDaoImpl implements ClassifyDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -116,14 +107,10 @@ public class ClassifyDaoImpl extends BaseDaoImpl implements ClassifyDao {
 	public Integer save(Classify classify) throws Exception {
 		try {
 			int result = classifyMapper.save(classify);
-			MyBatisUtil.commit();
 			return classify.getId();
 		} catch (Exception e) {
-			MyBatisUtil.rollback();
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -136,13 +123,9 @@ public class ClassifyDaoImpl extends BaseDaoImpl implements ClassifyDao {
 	public void update(Classify classify) throws Exception {
 		try {
 			classifyMapper.update(classify);
-			MyBatisUtil.commit();
 		} catch (Exception e) {
-			MyBatisUtil.rollback();
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -155,13 +138,9 @@ public class ClassifyDaoImpl extends BaseDaoImpl implements ClassifyDao {
 	public void deleteById(Integer id) throws Exception {
 		try {
 			classifyMapper.deleteById(id);
-			MyBatisUtil.commit();
 		} catch (Exception e) {
-			MyBatisUtil.rollback();
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 

@@ -9,7 +9,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="17486360-8e93-44bc-a19e-a722a476034d" name="Default" comment="" />
+    <list default="true" id="17486360-8e93-44bc-a19e-a722a476034d" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/mappers/ClassifyMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/mappers/ClassifyMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/mappers/GoodsMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/mappers/GoodsMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/dao/goods/ClassifyDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/dao/goods/ClassifyDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/dao/goods/ClassifyMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/dao/goods/ClassifyMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/dao/goods/GoodsDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/dao/goods/GoodsDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/dao/goods/GoodsMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/dao/goods/GoodsMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/dao/notice/NoticeDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/dao/notice/NoticeDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/dao/order/BaseOrderDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/dao/order/BaseOrderDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/dao/order/OrderInfoDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/dao/order/OrderInfoDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/dao/order/UserAddressDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/dao/order/UserAddressDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/dao/user/UserDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/dao/user/UserDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/service/goods/ClassifyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/service/goods/ClassifyServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/service/goods/GoodsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/service/goods/GoodsServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/service/notice/NoticeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/service/notice/NoticeServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/service/order/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/service/order/OrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/service/user/UserAddressServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/service/user/UserAddressServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/service/user/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/service/user/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/utils/MemcachedUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/utils/MemcachedUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/web/AbstractServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/web/AbstractServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/web/client/FavoriteServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/web/client/FavoriteServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn/interestingshop/web/client/GoodsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cn/interestingshop/web/client/GoodsServlet.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,6 +49,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Wameeee&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:/Wameeee/InterestingShop.git&quot;,
+    &quot;accountId&quot;: &quot;36a4108f-421e-437a-b929-9c73cb9eeeda&quot;
+  }
+}</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -47,38 +84,40 @@
     <option name="showMembers" value="true" />
     <option name="showScratchesAndConsoles" value="false" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.InterestingShop [clean].executor": "Run",
-    "Maven.InterestingShop [deploy].executor": "Run",
-    "Maven.InterestingShop [install].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Tomcat 服务器.Tomcat 9.0.14.executor": "Run",
-    "Tomcat 服务器.Tomcat 9.0.98.executor": "Run",
-    "Tomcat 服务器.index.jsp (1).executor": "Run",
-    "Tomcat 服务器.index.jsp.executor": "Run",
-    "Tomcat 服务器.login.jsp.executor": "Run",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "/Users/wameeee/Documents/趣买买项目素材/InterestingShop1",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "模块",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.49003518",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.InterestingShop [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.InterestingShop [deploy].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.InterestingShop [install].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Tomcat 服务器.Tomcat 9.0.14.executor&quot;: &quot;Run&quot;,
+    &quot;Tomcat 服务器.Tomcat 9.0.98.executor&quot;: &quot;Run&quot;,
+    &quot;Tomcat 服务器.index.jsp (1).executor&quot;: &quot;Run&quot;,
+    &quot;Tomcat 服务器.index.jsp.executor&quot;: &quot;Run&quot;,
+    &quot;Tomcat 服务器.login.jsp.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/wameeee/Documents/趣买买项目素材/InterestingShop1&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.49003518&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.tools&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ],
-    "com.intellij.ide.scratch.LRUPopupBuilder$1/SQL 方言": [
-      "MySQL"
+    &quot;com.intellij.ide.scratch.LRUPopupBuilder$1/SQL 方言&quot;: [
+      &quot;MySQL&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\工作\accp\9.0教材开发\ssm\Chapter04\资料\05 素材\趣买买项目素材\InterestingShop\web\WEB-INF\lib" />
@@ -553,7 +592,10 @@
       <workItem from="1748479912915" duration="7489000" />
       <workItem from="1748565225850" duration="1395000" />
       <workItem from="1748566632626" duration="7792000" />
-      <workItem from="1748575452026" duration="148000" />
+      <workItem from="1748575452026" duration="772000" />
+      <workItem from="1748929115702" duration="1335000" />
+      <workItem from="1748931118884" duration="5195000" />
+      <workItem from="1748936452697" duration="58000" />
     </task>
     <servers />
   </component>

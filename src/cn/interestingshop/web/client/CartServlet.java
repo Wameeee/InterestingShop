@@ -173,8 +173,15 @@ public class CartServlet extends AbstractServlet {
         
         //生成订单
         BaseOrder baseOrder = orderService.pay(user,cart,userAddress.getAddress());
-        clearCart(request, response);
+        
+        // 确保价格和地址信息正确传递
         request.setAttribute("currentOrder", baseOrder);
+        
+        // 打印日志，检查价格和地址是否正确
+        System.out.println("订单金额: " + baseOrder.getAmount());
+        System.out.println("订单地址: " + baseOrder.getUserAddress());
+        
+        clearCart(request, response);
         return "/client/settlement/settlement3";
     }
 

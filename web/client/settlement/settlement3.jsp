@@ -59,4 +59,9 @@
 		</div>
 	</form>
 </div>
+<script>
+// 调试信息
+console.log("订单金额: ${currentOrder.amount}");
+console.log("订单地址: ${currentOrder.userAddress}");
+</script>
 

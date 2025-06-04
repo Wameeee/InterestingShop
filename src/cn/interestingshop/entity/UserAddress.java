@@ -16,10 +16,6 @@ public class UserAddress implements Serializable {
     private Date createTime;//创建时间
 
     private String remark;
-
-    private String name;  // 收件人姓名
-    
-    private String phone; // 收件人电话
     
     private Integer isDefault; // 是否默认地址 1-默认 0-非默认
 
@@ -62,22 +58,6 @@ public class UserAddress implements Serializable {
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-    
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public String getPhone() {
-        return phone;
-    }
-    
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
     
     public Integer getIsDefault() {
         return isDefault;

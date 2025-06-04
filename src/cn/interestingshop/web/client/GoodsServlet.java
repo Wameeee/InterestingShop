@@ -50,21 +50,32 @@ public class GoodsServlet extends AbstractServlet {
         String pageSizeStr = request.getParameter("pageSize");
         int pageSize = EmptyUtils.isEmpty(pageSizeStr) ? 20:Integer.parseInt(pageSizeStr);
         int pageIndex = EmptyUtils.isEmpty(currentPageStr) ? 1 : Integer.parseInt(currentPageStr);
-        int  level=EmptyUtils.isNotEmpty(levelStr)?Integer.parseInt(levelStr):0;
-        int total = goodsService.getCount(keyWord, EmptyUtils.isEmpty(category)?null:Integer.valueOf(category));
+        int level = EmptyUtils.isNotEmpty(levelStr) ? Integer.parseInt(levelStr) : 1; // 默认为1级分类
+        
+        // 使用新添加的方法获取总数
+        Integer categoryId = EmptyUtils.isEmpty(category) ? null : Integer.valueOf(category);
+        int total = goodsService.getCountByLevel(keyWord, categoryId, level);
+        
         Pager pager = new Pager(total, pageSize, pageIndex);
         pager.setUrl("/goods?action=queryGoodsList&level="+level+"&category="+(EmptyUtils.isEmpty(category)?"":category));
         List<ClassifyVo> classifyVoList = classifyService.getList();
         
         int offset = Math.max(0, (pageIndex-1)*pageSize);
-        List<Goods> goodsList = goodsService.getList(offset, pageSize, keyWord, EmptyUtils.isEmpty(category)?null:Integer.valueOf(category));
+        
+        // 使用新添加的方法获取商品列表
+        List<Goods> goodsList = goodsService.getListByLevel(offset, pageSize, keyWord, categoryId, level);
+        
         request.setAttribute("goodsList", goodsList);
         request.setAttribute("pager", pager);
         request.setAttribute("total", total);
         request.setAttribute("keyWord", keyWord);
         request.setAttribute("classifyVoList", classifyVoList);
+        // 将level添加到request属性中，便于JSP页面使用
+        request.setAttribute("level", level);
+        request.setAttribute("category", category);
         return "/client/goods/queryGoodsList";
     }
+    
     /**
      *
      * @param request

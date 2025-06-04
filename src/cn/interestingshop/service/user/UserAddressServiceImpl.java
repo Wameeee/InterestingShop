@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
+
 import cn.interestingshop.dao.order.UserAddressDao;
 import cn.interestingshop.dao.order.UserAddressDaoImpl;
 import cn.interestingshop.entity.UserAddress;
 import cn.interestingshop.param.UserAddressParam;
 import cn.interestingshop.utils.DataSourceUtil;
+import cn.interestingshop.utils.MyBatisUtil;
 
 /**
  * Created by bdqn on 2016/5/12.
@@ -23,10 +26,12 @@ public class UserAddressServiceImpl implements UserAddressService {
      */
     public List<UserAddress> getList(Integer id) throws Exception{
         Connection connection = null;
+        SqlSession sqlSession = null;
         List<UserAddress> userAddressList = null;
         try {
             connection = DataSourceUtil.openConnection();
-            UserAddressDao userAddressDao = new UserAddressDaoImpl(connection);
+            sqlSession = MyBatisUtil.openSession();
+            UserAddressDao userAddressDao = new UserAddressDaoImpl(connection, sqlSession);
             UserAddressParam params = new UserAddressParam();
             params.setUserId(id);
             userAddressList = userAddressDao.selectList(params);
@@ -34,8 +39,11 @@ public class UserAddressServiceImpl implements UserAddressService {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-        }finally{
-        	DataSourceUtil.closeConnection(connection);
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
+            DataSourceUtil.closeConnection(connection);
         }
         return userAddressList;
     }
@@ -47,23 +55,35 @@ public class UserAddressServiceImpl implements UserAddressService {
      * @return
      */
     @Override
-    public Integer save(Integer id, String address,String remark) {
+    public Integer save(Integer id, String address, String remark) {
         Connection connection = null;
+        SqlSession sqlSession = null;
         Integer userAddressId = null;
         try {
             connection = DataSourceUtil.openConnection();
-            UserAddressDao userAddressDao = new UserAddressDaoImpl(connection);
-            UserAddress userAddress=new UserAddress();
+            sqlSession = MyBatisUtil.openSession();
+            UserAddressDao userAddressDao = new UserAddressDaoImpl(connection, sqlSession);
+            UserAddress userAddress = new UserAddress();
             userAddress.setUserId(id);
             userAddress.setAddress(address);
             userAddress.setRemark(remark);
             userAddressId = userAddressDao.save(userAddress);
+            sqlSession.commit();
         } catch (SQLException e) {
+            if (sqlSession != null) {
+                sqlSession.rollback();
+            }
             e.printStackTrace();
         } catch (Exception e) {
+            if (sqlSession != null) {
+                sqlSession.rollback();
+            }
             e.printStackTrace();
-        }finally{
-        	DataSourceUtil.closeConnection(connection);
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
+            DataSourceUtil.closeConnection(connection);
         }
         return userAddressId;
     }
@@ -71,18 +91,23 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Override
     public UserAddress getById(Integer id) {
         Connection connection = null;
-        UserAddress userAddress= null;
+        SqlSession sqlSession = null;
+        UserAddress userAddress = null;
         try {
             connection = DataSourceUtil.openConnection();
-            UserAddressDao userAddressDao = new UserAddressDaoImpl(connection);
+            sqlSession = MyBatisUtil.openSession();
+            UserAddressDao userAddressDao = new UserAddressDaoImpl(connection, sqlSession);
             userAddress = (UserAddress) userAddressDao.selectById(id);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
             DataSourceUtil.closeConnection(connection);
-            return  userAddress;
+            return userAddress;
         }
     }
 }

@@ -14,7 +14,6 @@ import cn.interestingshop.dao.user.UserAddressMapper;
 import cn.interestingshop.entity.UserAddress;
 import cn.interestingshop.param.UserAddressParam;
 import cn.interestingshop.utils.EmptyUtils;
-import cn.interestingshop.utils.MyBatisUtil;
 
 /**
  * 用户地址Dao实现
@@ -22,11 +21,11 @@ import cn.interestingshop.utils.MyBatisUtil;
 public class UserAddressDaoImpl extends BaseDaoImpl implements UserAddressDao {
 
     private UserAddressMapper userAddressMapper;
+    private SqlSession sqlSession;
 
-    public UserAddressDaoImpl(Connection connection) {
+    public UserAddressDaoImpl(Connection connection, SqlSession sqlSession) {
         super(connection);
-        // 获取MyBatis的UserAddressMapper接口实现
-        SqlSession sqlSession = MyBatisUtil.getSqlSession();
+        this.sqlSession = sqlSession;
         this.userAddressMapper = sqlSession.getMapper(UserAddressMapper.class);
     }
 
@@ -43,8 +42,6 @@ public class UserAddressDaoImpl extends BaseDaoImpl implements UserAddressDao {
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 
@@ -61,8 +58,6 @@ public class UserAddressDaoImpl extends BaseDaoImpl implements UserAddressDao {
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 
@@ -81,14 +76,10 @@ public class UserAddressDaoImpl extends BaseDaoImpl implements UserAddressDao {
             }
             userAddress.setCreateTime(new Date());
             int result = userAddressMapper.save(userAddress);
-            MyBatisUtil.commit();
             return userAddress.getId();
         } catch (Exception e) {
-            MyBatisUtil.rollback();
             e.printStackTrace();
             throw e;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 
@@ -105,13 +96,9 @@ public class UserAddressDaoImpl extends BaseDaoImpl implements UserAddressDao {
                 resetDefaultAddress(userAddress.getUserId());
             }
             userAddressMapper.update(userAddress);
-            MyBatisUtil.commit();
         } catch (Exception e) {
-            MyBatisUtil.rollback();
             e.printStackTrace();
             throw e;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 
@@ -124,13 +111,9 @@ public class UserAddressDaoImpl extends BaseDaoImpl implements UserAddressDao {
     public void deleteById(Integer id) throws Exception {
         try {
             userAddressMapper.deleteById(id);
-            MyBatisUtil.commit();
         } catch (Exception e) {
-            MyBatisUtil.rollback();
             e.printStackTrace();
             throw e;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 
@@ -157,8 +140,6 @@ public class UserAddressDaoImpl extends BaseDaoImpl implements UserAddressDao {
         userAddress.setAddress(rs.getString("address"));
         userAddress.setCreateTime(rs.getDate("createTime"));
         userAddress.setRemark(rs.getString("remark"));
-        userAddress.setName(rs.getString("name"));
-        userAddress.setPhone(rs.getString("phone"));
         userAddress.setIsDefault(rs.getInt("isDefault"));
         return userAddress;
     }
@@ -167,7 +148,7 @@ public class UserAddressDaoImpl extends BaseDaoImpl implements UserAddressDao {
     public List<UserAddress> selectList(UserAddressParam params) {
         List<Object> paramsList = new ArrayList<Object>();   
         List<UserAddress> userAddresseList = new ArrayList<UserAddress>();
-        StringBuffer sql = new StringBuffer("  select id,userId,address,createTime,isDefault,remark,name,phone from t_user_address where 1=1 ");
+        StringBuffer sql = new StringBuffer("  select id,userId,address,createTime,isDefault,remark from t_user_address where 1=1 ");
         if(EmptyUtils.isNotEmpty(params.getUserId())){
             sql.append(" and userId = ? ");
             paramsList.add(params.getUserId());

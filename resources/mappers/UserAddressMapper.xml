@@ -9,20 +9,18 @@
         <result property="address" column="address"/>
         <result property="createTime" column="createTime"/>
         <result property="remark" column="remark"/>
-        <result property="name" column="name"/>
-        <result property="phone" column="phone"/>
         <result property="isDefault" column="isDefault"/>
     </resultMap>
     
     <!-- 基础列 -->
     <sql id="baseColumns">
-        id, userId, address, createTime, remark, name, phone, isDefault
+        id, userId, address, createTime, remark, isDefault
     </sql>
     
     <!-- 保存用户地址 -->
     <insert id="save" parameterType="cn.interestingshop.entity.UserAddress" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO t_user_address(userId, address, createTime, remark, name, phone, isDefault)
-        VALUES (#{userId}, #{address}, #{createTime}, #{remark}, #{name}, #{phone}, #{isDefault})
+        INSERT INTO t_user_address(userId, address, createTime, remark, isDefault)
+        VALUES (#{userId}, #{address}, #{createTime}, #{remark}, #{isDefault})
     </insert>
     
     <!-- 更新用户地址 -->
@@ -30,8 +28,6 @@
         UPDATE t_user_address
         SET address = #{address},
             remark = #{remark},
-            name = #{name},
-            phone = #{phone},
             isDefault = #{isDefault}
         WHERE id = #{id}
     </update>

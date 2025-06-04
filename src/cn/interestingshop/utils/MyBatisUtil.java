@@ -10,12 +10,11 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.log4j.Logger;
 
 /**
- * MyBatis工具类
+ * MyBatis工具类，简化版本
  */
 public class MyBatisUtil {
     private static Logger logger = Logger.getLogger(MyBatisUtil.class);
     private static SqlSessionFactory sqlSessionFactory;
-    private static final ThreadLocal<SqlSession> threadLocal = new ThreadLocal<>();
 
     static {
         try {
@@ -29,56 +28,26 @@ public class MyBatisUtil {
     }
 
     /**
-     * 获取SqlSession对象
+     * 获取SqlSessionFactory
+     * @return SqlSessionFactory对象
+     */
+    public static SqlSessionFactory getSqlSessionFactory() {
+        return sqlSessionFactory;
+    }
+
+    /**
+     * 创建新的SqlSession
      * @return SqlSession对象
      */
-    public static SqlSession getSqlSession() {
-        SqlSession sqlSession = threadLocal.get();
-        if (sqlSession == null) {
-            sqlSession = sqlSessionFactory.openSession();
-            threadLocal.set(sqlSession);
-        }
-        return sqlSession;
+    public static SqlSession openSession() {
+        return sqlSessionFactory.openSession();
     }
 
     /**
-     * 关闭SqlSession对象
+     * 创建自动提交的SqlSession
+     * @return SqlSession对象
      */
-    public static void closeSqlSession() {
-        SqlSession sqlSession = threadLocal.get();
-        if (sqlSession != null) {
-            sqlSession.close();
-            threadLocal.remove();
-        }
-    }
-
-    /**
-     * 提交事务
-     */
-    public static void commit() {
-        SqlSession sqlSession = threadLocal.get();
-        if (sqlSession != null) {
-            sqlSession.commit();
-        }
-    }
-
-    /**
-     * 回滚事务
-     */
-    public static void rollback() {
-        SqlSession sqlSession = threadLocal.get();
-        if (sqlSession != null) {
-            sqlSession.rollback();
-        }
-    }
-
-    /**
-     * 获取Mapper接口的实现类
-     * @param <T> Mapper接口类型
-     * @param clazz Mapper接口Class对象
-     * @return Mapper接口实现类
-     */
-    public static <T> T getMapper(Class<T> clazz) {
-        return getSqlSession().getMapper(clazz);
+    public static SqlSession openSessionWithAutoCommit() {
+        return sqlSessionFactory.openSession(true);
     }
 } 

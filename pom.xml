@@ -98,6 +98,7 @@
             <artifactId>Memcached-Java-Client</artifactId>
             <version>3.0.2</version>
         </dependency>
+        
         <!-- Servlet/JSP/JSTL -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -115,12 +116,6 @@
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <version>${jstl.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.whalin</groupId>
-            <artifactId>Memcached-Java-Client</artifactId>
-            <version>3.0.2</version>
         </dependency>
 
         <!-- Alipay SDK -->

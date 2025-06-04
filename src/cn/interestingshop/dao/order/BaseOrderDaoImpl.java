@@ -10,7 +10,6 @@ import org.apache.ibatis.session.SqlSession;
 import cn.interestingshop.dao.BaseDaoImpl;
 import cn.interestingshop.entity.BaseOrder;
 import cn.interestingshop.utils.EmptyUtils;
-import cn.interestingshop.utils.MyBatisUtil;
 import cn.interestingshop.utils.Pager;
 
 /**
@@ -19,11 +18,11 @@ import cn.interestingshop.utils.Pager;
 public class BaseOrderDaoImpl extends BaseDaoImpl implements BaseOrderDao {
 
 	private OrderMapper orderMapper;
+	private SqlSession sqlSession;
 
-	public BaseOrderDaoImpl(Connection connection) {
+	public BaseOrderDaoImpl(Connection connection, SqlSession sqlSession) {
 		super(connection);
-		// 获取MyBatis的OrderMapper接口实现
-		SqlSession sqlSession = MyBatisUtil.getSqlSession();
+		this.sqlSession = sqlSession;
 		this.orderMapper = sqlSession.getMapper(OrderMapper.class);
 	}
 
@@ -40,8 +39,6 @@ public class BaseOrderDaoImpl extends BaseDaoImpl implements BaseOrderDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -64,8 +61,6 @@ public class BaseOrderDaoImpl extends BaseDaoImpl implements BaseOrderDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -82,8 +77,6 @@ public class BaseOrderDaoImpl extends BaseDaoImpl implements BaseOrderDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -96,13 +89,9 @@ public class BaseOrderDaoImpl extends BaseDaoImpl implements BaseOrderDao {
 	public void save(BaseOrder baseOrder) throws Exception {
 		try {
 			int result = orderMapper.saveBaseOrder(baseOrder);
-			MyBatisUtil.commit();
 		} catch (Exception e) {
-			MyBatisUtil.rollback();
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -116,13 +105,9 @@ public class BaseOrderDaoImpl extends BaseDaoImpl implements BaseOrderDao {
 	public void updateStatus(Integer id, Integer status) throws Exception {
 		try {
 			orderMapper.updateOrderStatus(id, status);
-			MyBatisUtil.commit();
 		} catch (Exception e) {
-			MyBatisUtil.rollback();
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -135,13 +120,9 @@ public class BaseOrderDaoImpl extends BaseDaoImpl implements BaseOrderDao {
 	public void deleteById(Integer id) throws Exception {
 		try {
 			orderMapper.deleteBaseOrderById(id);
-			MyBatisUtil.commit();
 		} catch (Exception e) {
-			MyBatisUtil.rollback();
 			e.printStackTrace();
 			throw e;
-		} finally {
-			MyBatisUtil.closeSqlSession();
 		}
 	}
 
@@ -150,12 +131,11 @@ public class BaseOrderDaoImpl extends BaseDaoImpl implements BaseOrderDao {
 		BaseOrder baseOrder = new BaseOrder();
 		baseOrder.setId(rs.getInt("id"));
 		baseOrder.setUserId(rs.getInt("userId"));
-		baseOrder.setAddressId(rs.getInt("addressId"));
+		baseOrder.setUserAddress(rs.getString("userAddress"));
 		baseOrder.setCreateTime(rs.getDate("createTime"));
-		baseOrder.setCost(rs.getFloat("cost"));
-		baseOrder.setSerialNumber(rs.getString("serialNumber"));
-		baseOrder.setPayType(rs.getInt("payType"));
-		baseOrder.setStatus(rs.getInt("status"));
+		baseOrder.setAmount(rs.getFloat("amount"));
+		baseOrder.setOrderNo(rs.getString("orderNo"));
+		baseOrder.setAccount(rs.getString("account"));
 		return baseOrder;
 	}
 }

@@ -26,35 +26,49 @@ public class MemcachedUtils {
 
     static {
         try {
-            String[] attr = connectUrls;
+            // 初始化 Memcached 客户端
             client = new MemCachedClient();
-            SockIOPool pool = SockIOPool.getInstance();
-            pool.setServers(attr);
-            pool.setWeights(new Integer[]{3});
-            pool.setInitConn(5);
-            pool.setMinConn(5);
-            pool.setMaxConn(200);
-            pool.setMaxIdle(1000 * 30 * 30);
-            pool.setMaintSleep(30);
-            pool.setNagle(false);
-            pool.setSocketConnectTO(30);
-            pool.setSocketTO(3000); // Set socket timeout
-            pool.initialize();
             
-            // Test connection
-            client.set("test_key", "test_value");
-            Object result = client.get("test_key");
-            memcachedAvailable = "test_value".equals(result);
-            
-            if (memcachedAvailable) {
-                logger.info("Memcached connection successful");
-            } else {
-                logger.warning("Memcached test failed - falling back to local cache");
+            // 设置和初始化连接池
+            try {
+                SockIOPool pool = SockIOPool.getInstance();
+                pool.setServers(connectUrls);
+                pool.setWeights(new Integer[]{3});
+                pool.setInitConn(5);
+                pool.setMinConn(5);
+                pool.setMaxConn(200);
+                pool.setMaxIdle(1000 * 30 * 30);
+                pool.setMaintSleep(30);
+                pool.setNagle(false);
+                pool.setSocketConnectTO(30);
+                pool.setSocketTO(3000); // Set socket timeout
+                pool.initialize();
+                
+                // 测试连接
+                try {
+                    client.set("test_key", "test_value");
+                    Object result = client.get("test_key");
+                    memcachedAvailable = "test_value".equals(result);
+                    
+                    if (memcachedAvailable) {
+                        logger.info("Memcached connection successful");
+                    } else {
+                        logger.warning("Memcached test failed - falling back to local cache");
+                    }
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, "Memcached connection test failed - falling back to local cache", e);
+                    memcachedAvailable = false;
+                }
+            } catch (Exception e) {
+                logger.log(Level.WARNING, "Memcached pool initialization failed - falling back to local cache", e);
+                memcachedAvailable = false;
             }
-        } catch (Exception e) {
-            logger.log(Level.WARNING, "Memcached initialization failed - falling back to local cache", e);
+        } catch (Throwable e) {
+            logger.log(Level.WARNING, "Memcached client initialization failed - falling back to local cache", e);
             memcachedAvailable = false;
         }
+        
+        logger.info("MemcachedUtils initialized. Using Memcached: " + memcachedAvailable);
     }
 
     public static void add(String key, Object object) {
@@ -96,17 +110,21 @@ public class MemcachedUtils {
         
         try {
             if (memcachedAvailable) {
-                Object value = client.get(key);
-                if (value != null) {
-                    return value;
+                try {
+                    Object value = client.get(key);
+                    if (value != null) {
+                        return value;
+                    }
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, "Memcached get operation failed for key: " + key, e);
+                    memcachedAvailable = false;
                 }
             }
             // If memcached failed or returned null, check local cache
             return localCache.get(key);
         } catch (Exception e) {
-            logger.log(Level.WARNING, "Memcached get operation failed for key: " + key, e);
-            memcachedAvailable = false;
-            return localCache.get(key);
+            logger.log(Level.WARNING, "Cache get operation failed for key: " + key, e);
+            return null;
         }
     }
 

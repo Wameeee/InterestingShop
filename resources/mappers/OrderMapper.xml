@@ -6,43 +6,42 @@
     <resultMap id="baseOrderMap" type="cn.interestingshop.entity.BaseOrder">
         <id property="id" column="id"/>
         <result property="userId" column="userId"/>
-        <result property="addressId" column="addressId"/>
+        <result property="userAddress" column="userAddress"/>
         <result property="createTime" column="createTime"/>
-        <result property="cost" column="cost"/>
-        <result property="serialNumber" column="serialNumber"/>
-        <result property="payType" column="payType"/>
-        <result property="status" column="status"/>
+        <result property="amount" column="amount"/>
+        <result property="orderNo" column="orderNo"/>
+        <result property="account" column="account"/>
     </resultMap>
     
     <!-- 订单详情结果映射 -->
     <resultMap id="orderInfoMap" type="cn.interestingshop.entity.OrderInfo">
         <id property="id" column="id"/>
         <result property="goodsId" column="goodsId"/>
-        <result property="orderId" column="orderId"/>
-        <result property="quantity" column="quantity"/>
-        <result property="cost" column="cost"/>
+        <result property="baseOrderId" column="baseOrderId"/>
+        <result property="buyNum" column="buyNum"/>
+        <result property="amount" column="amount"/>
     </resultMap>
     
     <!-- 订单基本信息基础列 -->
     <sql id="baseOrderColumns">
-        id, userId, addressId, createTime, cost, serialNumber, payType, status
+        id, userId, userAddress, createTime, amount, orderNo, account
     </sql>
     
     <!-- 订单详情基础列 -->
     <sql id="orderInfoColumns">
-        id, goodsId, orderId, quantity, cost
+        id, goodsId, baseOrderId, buyNum, amount
     </sql>
     
     <!-- 保存订单基本信息 -->
     <insert id="saveBaseOrder" parameterType="cn.interestingshop.entity.BaseOrder" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO t_base_order(userId, addressId, createTime, cost, serialNumber, payType, status)
-        VALUES (#{userId}, #{addressId}, #{createTime}, #{cost}, #{serialNumber}, #{payType}, #{status})
+        INSERT INTO t_base_order(userId, userAddress, createTime, amount, orderNo, account)
+        VALUES (#{userId}, #{userAddress}, #{createTime}, #{amount}, #{orderNo}, #{account})
     </insert>
     
     <!-- 保存订单详情信息 -->
     <insert id="saveOrderInfo" parameterType="cn.interestingshop.entity.OrderInfo" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO t_order_info(goodsId, orderId, quantity, cost)
-        VALUES (#{goodsId}, #{orderId}, #{quantity}, #{cost})
+        INSERT INTO t_order_info(goodsId, baseOrderId, buyNum, amount)
+        VALUES (#{goodsId}, #{baseOrderId}, #{buyNum}, #{amount})
     </insert>
     
     <!-- 更新订单状态 -->
@@ -97,6 +96,6 @@
     <select id="selectOrderInfoListByOrderId" parameterType="java.lang.Integer" resultMap="orderInfoMap">
         SELECT <include refid="orderInfoColumns"/>
         FROM t_order_info
-        WHERE orderId = #{orderId}
+        WHERE baseOrderId = #{orderId}
     </select>
 </mapper> 

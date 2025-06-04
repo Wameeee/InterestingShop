@@ -10,8 +10,8 @@ import org.apache.ibatis.session.SqlSession;
 import cn.interestingshop.dao.BaseDaoImpl;
 import cn.interestingshop.entity.Goods;
 import cn.interestingshop.utils.EmptyUtils;
-import cn.interestingshop.utils.MyBatisUtil;
 import cn.interestingshop.utils.Pager;
+import cn.interestingshop.utils.ThreadLocalContext;
 
 /**
  * 商品dao实现类
@@ -19,11 +19,11 @@ import cn.interestingshop.utils.Pager;
 public class GoodsDaoImpl extends BaseDaoImpl implements GoodsDao {
 
     private GoodsMapper goodsMapper;
+    private SqlSession sqlSession;
 
-    public GoodsDaoImpl(Connection connection) {
+    public GoodsDaoImpl(Connection connection, SqlSession sqlSession) {
         super(connection);
-        // 获取MyBatis的GoodsMapper接口实现
-        SqlSession sqlSession = MyBatisUtil.getSqlSession();
+        this.sqlSession = sqlSession;
         this.goodsMapper = sqlSession.getMapper(GoodsMapper.class);
     }
 
@@ -40,8 +40,6 @@ public class GoodsDaoImpl extends BaseDaoImpl implements GoodsDao {
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 
@@ -57,19 +55,20 @@ public class GoodsDaoImpl extends BaseDaoImpl implements GoodsDao {
     @Override
     public List<Goods> selectList(Integer currentPageNo, Integer pageSize, String goodsName, Integer goodsType) throws Exception {
         try {
-            Integer count = goodsMapper.selectCount(goodsType, goodsName);
+            // 获取level值，从ThreadLocal中获取
+            Integer level = ThreadLocalContext.getLevel();
+            
+            Integer count = goodsMapper.selectCount(goodsType, goodsName, level);
             Pager pager = new Pager(count, pageSize, currentPageNo);
 
             // 修复：确保当前页码至少为1
             int currentPage = Math.max(pager.getCurrentPage(), 1);
             int offset = (currentPage - 1) * pager.getRowPerPage();
 
-            return selectGoodsList(offset, pager.getRowPerPage(), goodsType, goodsName);
+            return selectGoodsList(offset, pager.getRowPerPage(), goodsType, goodsName, level);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 
@@ -79,11 +78,12 @@ public class GoodsDaoImpl extends BaseDaoImpl implements GoodsDao {
      * @param limit
      * @param classifyId
      * @param name
+     * @param level 分类级别
      * @return
      * @throws Exception
      */
-    private List<Goods> selectGoodsList(int offset, int limit, Integer classifyId, String name) throws Exception {
-        return goodsMapper.selectList(offset, limit, classifyId, name);
+    private List<Goods> selectGoodsList(int offset, int limit, Integer classifyId, String name, Integer level) throws Exception {
+        return goodsMapper.selectList(offset, limit, classifyId, name, level);
     }
 
     /**
@@ -96,13 +96,14 @@ public class GoodsDaoImpl extends BaseDaoImpl implements GoodsDao {
     @Override
     public Integer selectCount(String goodsName, Integer goodsType) throws Exception {
         try {
+            // 获取level值，从ThreadLocal中获取
+            Integer level = ThreadLocalContext.getLevel();
+            
             // 使用适配方法调用mapper，正确处理参数顺序
-            return selectGoodsCount(goodsType, goodsName);
+            return selectGoodsCount(goodsType, goodsName, level);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
     
@@ -110,11 +111,12 @@ public class GoodsDaoImpl extends BaseDaoImpl implements GoodsDao {
      * 适配方法：确保参数顺序与GoodsMapper.selectCount一致
      * @param classifyId
      * @param name
+     * @param level 分类级别
      * @return
      * @throws Exception
      */
-    private int selectGoodsCount(Integer classifyId, String name) throws Exception {
-        return goodsMapper.selectCount(classifyId, name);
+    private int selectGoodsCount(Integer classifyId, String name, Integer level) throws Exception {
+        return goodsMapper.selectCount(classifyId, name, level);
     }
 
     /**
@@ -127,14 +129,10 @@ public class GoodsDaoImpl extends BaseDaoImpl implements GoodsDao {
     public Integer save(Goods goods) throws Exception {
         try {
             int result = goodsMapper.save(goods);
-            MyBatisUtil.commit();
             return goods.getId();
         } catch (Exception e) {
-            MyBatisUtil.rollback();
             e.printStackTrace();
             throw e;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 
@@ -147,14 +145,10 @@ public class GoodsDaoImpl extends BaseDaoImpl implements GoodsDao {
     public Integer update(Goods goods) throws Exception {
         try {
             int result = goodsMapper.update(goods);
-            MyBatisUtil.commit();
             return result;
         } catch (Exception e) {
-            MyBatisUtil.rollback();
             e.printStackTrace();
             throw e;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 
@@ -167,14 +161,10 @@ public class GoodsDaoImpl extends BaseDaoImpl implements GoodsDao {
     public Integer deleteById(Integer id) throws Exception {
         try {
             int result = goodsMapper.deleteById(id);
-            MyBatisUtil.commit();
             return result;
         } catch (Exception e) {
-            MyBatisUtil.rollback();
             e.printStackTrace();
             throw e;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 
@@ -201,16 +191,12 @@ public class GoodsDaoImpl extends BaseDaoImpl implements GoodsDao {
             if (goods != null && goods.getStock() >= buyNum) {
                 goods.setStock(goods.getStock() - buyNum);
                 int result = goodsMapper.update(goods);
-                MyBatisUtil.commit();
                 return result;
             }
             return 0;
         } catch (Exception e) {
-            MyBatisUtil.rollback();
             e.printStackTrace();
             throw e;
-        } finally {
-            MyBatisUtil.closeSqlSession();
         }
     }
 }
